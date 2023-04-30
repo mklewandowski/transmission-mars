@@ -345,7 +345,7 @@ GameObject:
   - component: {fileID: 134579097}
   - component: {fileID: 134579096}
   m_Layer: 5
-  m_Name: IntroPanel
+  m_Name: StoryPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2651,7 +2651,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ff239e903bd014541a1e8f726166f48e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fa99c7a233df6c84fbbc41ddbbdbf369, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2852,7 +2852,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2031485158}
         m_TargetAssemblyTypeName: GameSceneManager, Assembly-CSharp
-        m_MethodName: ChooseTwo
+        m_MethodName: NextStoryEvent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3124,7 +3124,7 @@ GameObject:
   - component: {fileID: 1461904002}
   - component: {fileID: 1461904004}
   m_Layer: 5
-  m_Name: TextPanel
+  m_Name: DialogPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3818,7 +3818,7 @@ GameObject:
   - component: {fileID: 1842386877}
   - component: {fileID: 1842386879}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: DialogText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4139,13 +4139,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TitlePanel: {fileID: 697461235}
-  IntroPanel: {fileID: 134579095}
-  TextContainer: {fileID: 1461904000}
-  TextContainerText: {fileID: 1842386879}
+  StoryPanel: {fileID: 134579095}
   PersonContainer: {fileID: 936805097}
+  PersonImage: {fileID: 936805099}
+  ChloeSprite: {fileID: 21300000, guid: ff239e903bd014541a1e8f726166f48e, type: 3}
+  ChloeTalkSprite: {fileID: 21300000, guid: 9fef7c4d6786a8a4ab8fb17bf5b32685, type: 3}
+  FritzSprite: {fileID: 21300000, guid: 1ea85e61092b9b24c9b0d63e45e78813, type: 3}
+  FritzTalkSprite: {fileID: 21300000, guid: 33f59c8085965834e8ea547fe97af3d3, type: 3}
+  DialogContainer: {fileID: 1461904000}
+  DialogContainerText: {fileID: 1842386879}
   ChoiceContainer: {fileID: 869312613}
+  Choice1Text: {fileID: 388270676}
+  Choice2Text: {fileID: 511519497}
   StationContainer: {fileID: 1824564305}
   StationText: {fileID: 1113982625}
+  WeekText: {fileID: 2045259506}
   InterludeContainer: {fileID: 747176462}
 --- !u!4 &2031485159
 Transform:
