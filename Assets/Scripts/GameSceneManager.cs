@@ -19,6 +19,15 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField]
     Image PersonImage;
     [SerializeField]
+    Sprite ChloeSprite;
+    [SerializeField]
+    Sprite ChloeTalkSprite;
+    [SerializeField]
+    Sprite FritzSprite;
+    [SerializeField]
+    Sprite FritzTalkSprite;
+
+    [SerializeField]
     GameObject DialogContainer;
     [SerializeField]
     TypewriterUI DialogContainerText;
@@ -45,11 +54,8 @@ public class GameSceneManager : MonoBehaviour
     float delayTimer = 0f;
     float delayTimerMax = 1f;
 
-    StoryEvent introStoryEvent;
-    [SerializeField]
-    Sprite ChloeSprite;
-    [SerializeField]
-    Sprite ChloeTalkSprite;
+    StoryEvent[] storyEvents = new StoryEvent[10];
+    int currStoryEvent = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +63,7 @@ public class GameSceneManager : MonoBehaviour
         GameObject am = GameObject.Find("AudioManager");
         audioManager = am.GetComponent<AudioManager>();
 
-        introStoryEvent = new StoryEvent();
+        StoryEvent introStoryEvent = new StoryEvent();
         introStoryEvent.ChoiceLeadIn = "none";
         introStoryEvent.Choice1 = "5 GHZ";
         introStoryEvent.Choice2 = "10 GHZ";
@@ -76,6 +82,7 @@ public class GameSceneManager : MonoBehaviour
         postChunk.PersonName = "CHLOE: ";
         postChunk.PersonDialog.Add("Great! Let's start sending lunar lo-fi across the Martian mountains!");
         introStoryEvent.PostDialogChunks.Add(postChunk);
+        storyEvents[0] = introStoryEvent;
     }
 
     // Update is called once per frame
@@ -89,9 +96,9 @@ public class GameSceneManager : MonoBehaviour
                 DialogContainer.transform.localScale = new Vector3 (.1f, .1f, .1f);
                 DialogContainer.SetActive(true);
                 DialogContainer.GetComponent<GrowAndShrink>().StartEffect();
-                DialogContainerText.StartEffect(introStoryEvent.PreDialogChunks[currTextChunk].PersonName,
-                    introStoryEvent.PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
-                    introStoryEvent.PreDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PreDialogChunks[currTextChunk].PersonTalkSprite
+                DialogContainerText.StartEffect(storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonName,
+                    storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+                    storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite, storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonTalkSprite
                 );
             }
         }
@@ -101,7 +108,7 @@ public class GameSceneManager : MonoBehaviour
     {
         audioManager.PlayMenuSound();
         TitlePanel.GetComponent<MoveNormal>().MoveUp();
-        PersonImage.sprite = introStoryEvent.PreDialogChunks[0].PersonSprite;
+        PersonImage.sprite = storyEvents[currStoryEvent].PreDialogChunks[0].PersonSprite;
         StoryPanel.GetComponent<MoveNormal>().MoveUp();
         delayTimer = delayTimerMax;
     }
@@ -112,24 +119,24 @@ public class GameSceneManager : MonoBehaviour
         currTextChunkIndex++;
         if (currTextPre)
         {
-            if (currTextChunkIndex < introStoryEvent.PreDialogChunks[currTextChunk].PersonDialog.Count)
+            if (currTextChunkIndex < storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonDialog.Count)
             {
-                DialogContainerText.StartEffect(introStoryEvent.PreDialogChunks[currTextChunk].PersonName,
-                    introStoryEvent.PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
-                    introStoryEvent.PreDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PreDialogChunks[currTextChunk].PersonTalkSprite
+                DialogContainerText.StartEffect(storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonName,
+                    storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+                    storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite, storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonTalkSprite
                 );
             }
             else
             {
                 currTextChunk++;
                 // we either need to read the next dialog chunk or move to post
-                if (currTextChunk < introStoryEvent.PreDialogChunks.Count)
+                if (currTextChunk < storyEvents[currStoryEvent].PreDialogChunks.Count)
                 {
                     // someone else needs to speak
                     currTextChunkIndex = 0;
-                    DialogContainerText.StartEffect(introStoryEvent.PreDialogChunks[currTextChunk].PersonName,
-                        introStoryEvent.PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
-                        introStoryEvent.PreDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PreDialogChunks[currTextChunk].PersonTalkSprite
+                    DialogContainerText.StartEffect(storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonName,
+                        storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+                        storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite, storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonTalkSprite
                     );
                 }
                 else
@@ -143,11 +150,11 @@ public class GameSceneManager : MonoBehaviour
         }
         else
         {
-            if (currTextChunkIndex < introStoryEvent.PostDialogChunks[currTextChunk].PersonDialog.Count)
+            if (currTextChunkIndex < storyEvents[currStoryEvent].PostDialogChunks[currTextChunk].PersonDialog.Count)
             {
-                DialogContainerText.StartEffect(introStoryEvent.PostDialogChunks[currTextChunk].PersonName,
-                    introStoryEvent.PostDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
-                    introStoryEvent.PostDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PostDialogChunks[currTextChunk].PersonTalkSprite
+                DialogContainerText.StartEffect(storyEvents[currStoryEvent].PostDialogChunks[currTextChunk].PersonName,
+                    storyEvents[currStoryEvent].PostDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+                    storyEvents[currStoryEvent].PostDialogChunks[currTextChunk].PersonSprite, storyEvents[currStoryEvent].PostDialogChunks[currTextChunk].PersonTalkSprite
                 );
             }
             else
@@ -163,21 +170,21 @@ public class GameSceneManager : MonoBehaviour
 
     public void ShowChoice()
     {
-        Choice1Text.text = introStoryEvent.Choice1;
-        Choice2Text.text = introStoryEvent.Choice2;
+        Choice1Text.text = storyEvents[currStoryEvent].Choice1;
+        Choice2Text.text = storyEvents[currStoryEvent].Choice2;
         DialogContainer.SetActive(false);
         ChoiceContainer.SetActive(true);
     }
 
     public void ChooseOne()
     {
-        StationText.text = introStoryEvent.Choice1;
+        StationText.text = storyEvents[currStoryEvent].Choice1;
         MakeChoice();
     }
 
     public void ChooseTwo()
     {
-        StationText.text = introStoryEvent.Choice2;
+        StationText.text = storyEvents[currStoryEvent].Choice2;
         MakeChoice();
     }
 
@@ -190,9 +197,9 @@ public class GameSceneManager : MonoBehaviour
         DialogContainer.transform.localScale = new Vector3 (.1f, .1f, .1f);
         DialogContainer.SetActive(true);
         DialogContainer.GetComponent<GrowAndShrink>().StartEffect();
-        DialogContainerText.StartEffect(introStoryEvent.PostDialogChunks[currTextChunk].PersonName,
-            introStoryEvent.PostDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
-            introStoryEvent.PostDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PostDialogChunks[currTextChunk].PersonTalkSprite
+        DialogContainerText.StartEffect(storyEvents[currStoryEvent].PostDialogChunks[currTextChunk].PersonName,
+            storyEvents[currStoryEvent].PostDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+            storyEvents[currStoryEvent].PostDialogChunks[currTextChunk].PersonSprite, storyEvents[currStoryEvent].PostDialogChunks[currTextChunk].PersonTalkSprite
         );
         StationContainer.SetActive(true);
     }
