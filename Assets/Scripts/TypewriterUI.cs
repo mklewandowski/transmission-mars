@@ -83,7 +83,7 @@ public class TypewriterUI : MonoBehaviour
         PersonTalkAnimationFrames[1] = f2;
     }
 
-    public void StartEffect(string staticText, string text)
+    public void StartEffect(string staticText, string text, Sprite talk1, Sprite talk2)
     {
         textHeader = staticText;
         textToType = text;
@@ -91,5 +91,7 @@ public class TypewriterUI : MonoBehaviour
         typeTimer = typeTimerMax;
         clickTimer = clickTimerMax;
         talkTimer = talkTimerMax;
+        PersonTalkAnimationFrames[0] = talk1;
+        PersonTalkAnimationFrames[1] = talk2;
     }
 }

@@ -12,21 +12,27 @@ public class GameSceneManager : MonoBehaviour
     GameObject TitlePanel;
 
     [SerializeField]
-    GameObject IntroPanel;
+    GameObject StoryPanel;
 
-    [SerializeField]
-    GameObject TextContainer;
-    [SerializeField]
-    TypewriterUI TextContainerText;
     [SerializeField]
     GameObject PersonContainer;
+    [SerializeField]
+    Image PersonImage;
+    [SerializeField]
+    GameObject DialogContainer;
+    [SerializeField]
+    TypewriterUI DialogContainerText;
 
-
-    int currText = 0;
-    int currTextBlock = 0;
+    int currTextChunk = 0;
+    int currTextChunkIndex = 0;
+    bool currTextPre = true;
 
     [SerializeField]
     GameObject ChoiceContainer;
+    [SerializeField]
+    TextMeshProUGUI Choice1Text;
+    [SerializeField]
+    TextMeshProUGUI Choice2Text;
 
     [SerializeField]
     GameObject StationContainer;
@@ -39,21 +45,37 @@ public class GameSceneManager : MonoBehaviour
     float delayTimer = 0f;
     float delayTimerMax = 1f;
 
-    string [] introText = {
-        "We made it to Mars! And we have all the equipment needed to start our new radio station!",
-        "Soon, the people of Mars will be in love with lunar lo-fi.",
-        "We're in charge of the tech so first we need to pick a frequency to broadcast our music.",
-        "I think we should try 1 GHZ or 2 GHZ. What do you think?"
-    };
-    string [] intro2Text = {
-        "Great! Let's start sending lunar lo-fi across the Martian mountains!"
-    };
+    StoryEvent introStoryEvent;
+    [SerializeField]
+    Sprite ChloeSprite;
+    [SerializeField]
+    Sprite ChloeTalkSprite;
 
     // Start is called before the first frame update
     void Start()
     {
         GameObject am = GameObject.Find("AudioManager");
         audioManager = am.GetComponent<AudioManager>();
+
+        introStoryEvent = new StoryEvent();
+        introStoryEvent.ChoiceLeadIn = "none";
+        introStoryEvent.Choice1 = "5 GHZ";
+        introStoryEvent.Choice2 = "10 GHZ";
+        DialogChunk preChunk = new DialogChunk();
+        preChunk.PersonSprite = ChloeSprite;
+        preChunk.PersonTalkSprite = ChloeTalkSprite;
+        preChunk.PersonName = "CHLOE: ";
+        preChunk.PersonDialog.Add("We made it to Mars! And we have all the equipment needed to start our new radio station!");
+        preChunk.PersonDialog.Add("Soon, the people of Mars will fall in love with lunar lo-fi!");
+        preChunk.PersonDialog.Add("We're in charge of the tech so first we need to pick a frequency to broadcast our music.");
+        preChunk.PersonDialog.Add("I think we should try 5 GHZ or 10 GHZ. What do you think?");
+        introStoryEvent.PreDialogChunks.Add(preChunk);
+        DialogChunk postChunk = new DialogChunk();
+        postChunk.PersonSprite = ChloeSprite;
+        postChunk.PersonTalkSprite = ChloeTalkSprite;
+        postChunk.PersonName = "CHLOE: ";
+        postChunk.PersonDialog.Add("Great! Let's start sending lunar lo-fi across the Martian mountains!");
+        introStoryEvent.PostDialogChunks.Add(postChunk);
     }
 
     // Update is called once per frame
@@ -64,10 +86,13 @@ public class GameSceneManager : MonoBehaviour
             delayTimer -= Time.deltaTime;
             if (delayTimer < 0)
             {
-                TextContainer.transform.localScale = new Vector3 (.1f, .1f, .1f);
-                TextContainer.SetActive(true);
-                TextContainer.GetComponent<GrowAndShrink>().StartEffect();
-                TextContainerText.StartEffect( "CHLOE: ", introText[currText]);
+                DialogContainer.transform.localScale = new Vector3 (.1f, .1f, .1f);
+                DialogContainer.SetActive(true);
+                DialogContainer.GetComponent<GrowAndShrink>().StartEffect();
+                DialogContainerText.StartEffect(introStoryEvent.PreDialogChunks[currTextChunk].PersonName,
+                    introStoryEvent.PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+                    introStoryEvent.PreDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PreDialogChunks[currTextChunk].PersonTalkSprite
+                );
             }
         }
     }
@@ -76,29 +101,59 @@ public class GameSceneManager : MonoBehaviour
     {
         audioManager.PlayMenuSound();
         TitlePanel.GetComponent<MoveNormal>().MoveUp();
-        IntroPanel.GetComponent<MoveNormal>().MoveUp();
+        PersonImage.sprite = introStoryEvent.PreDialogChunks[0].PersonSprite;
+        StoryPanel.GetComponent<MoveNormal>().MoveUp();
         delayTimer = delayTimerMax;
     }
 
     public void AdvanceText()
     {
         audioManager.PlayMenuSound();
-        currText++;
-        if (currText < (currTextBlock == 0 ? introText.Length : intro2Text.Length))
+        currTextChunkIndex++;
+        if (currTextPre)
         {
-            TextContainerText.StartEffect( "CHLOE: ", currTextBlock == 0 ? introText[currText] : intro2Text[currText]);
+            if (currTextChunkIndex < introStoryEvent.PreDialogChunks[currTextChunk].PersonDialog.Count)
+            {
+                DialogContainerText.StartEffect(introStoryEvent.PreDialogChunks[currTextChunk].PersonName,
+                    introStoryEvent.PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+                    introStoryEvent.PreDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PreDialogChunks[currTextChunk].PersonTalkSprite
+                );
+            }
+            else
+            {
+                currTextChunk++;
+                // we either need to read the next dialog chunk or move to post
+                if (currTextChunk < introStoryEvent.PreDialogChunks.Count)
+                {
+                    // someone else needs to speak
+                    currTextChunkIndex = 0;
+                    DialogContainerText.StartEffect(introStoryEvent.PreDialogChunks[currTextChunk].PersonName,
+                        introStoryEvent.PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+                        introStoryEvent.PreDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PreDialogChunks[currTextChunk].PersonTalkSprite
+                    );
+                }
+                else
+                {
+                    // show choice
+                    currTextPre = false;
+                    ShowChoice();
+                }
+
+            }
         }
         else
         {
-            if (currTextBlock == 0)
+            if (currTextChunkIndex < introStoryEvent.PostDialogChunks[currTextChunk].PersonDialog.Count)
             {
-                currTextBlock = 1;
-                ShowChoice();
+                DialogContainerText.StartEffect(introStoryEvent.PostDialogChunks[currTextChunk].PersonName,
+                    introStoryEvent.PostDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+                    introStoryEvent.PostDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PostDialogChunks[currTextChunk].PersonTalkSprite
+                );
             }
             else
             {
                 // hide this section of story
-                TextContainer.SetActive(false);
+                DialogContainer.SetActive(false);
                 audioManager.StartMusic();
                 PersonContainer.GetComponent<MoveNormal>().MoveDown();
                 InterludeContainer.GetComponent<MoveNormal>().MoveUp();
@@ -108,33 +163,39 @@ public class GameSceneManager : MonoBehaviour
 
     public void ShowChoice()
     {
-        TextContainer.SetActive(false);
+        Choice1Text.text = introStoryEvent.Choice1;
+        Choice2Text.text = introStoryEvent.Choice2;
+        DialogContainer.SetActive(false);
         ChoiceContainer.SetActive(true);
     }
 
     public void ChooseOne()
     {
-        audioManager.PlayMenuSound();
-        ChoiceContainer.SetActive(false);
-        currText = 0;
-        TextContainer.transform.localScale = new Vector3 (.1f, .1f, .1f);
-        TextContainer.SetActive(true);
-        TextContainer.GetComponent<GrowAndShrink>().StartEffect();
-        TextContainerText.StartEffect( "CHLOE: ", intro2Text[currText]);
-        StationText.text = "1 GHZ";
-        StationContainer.SetActive(true);
+        StationText.text = introStoryEvent.Choice1;
+        MakeChoice();
     }
 
     public void ChooseTwo()
     {
+        StationText.text = introStoryEvent.Choice2;
+        MakeChoice();
+    }
+
+    public void MakeChoice()
+    {
         audioManager.PlayMenuSound();
         ChoiceContainer.SetActive(false);
-        currText = 0;
-        TextContainer.transform.localScale = new Vector3 (.1f, .1f, .1f);
-        TextContainer.SetActive(true);
-        TextContainer.GetComponent<GrowAndShrink>().StartEffect();
-        TextContainerText.StartEffect( "CHLOE: ", intro2Text[currText]);
-        StationText.text = "2 GHZ";
+        currTextChunkIndex = 0;
+        currTextChunk = 0;
+        DialogContainer.transform.localScale = new Vector3 (.1f, .1f, .1f);
+        DialogContainer.SetActive(true);
+        DialogContainer.GetComponent<GrowAndShrink>().StartEffect();
+        DialogContainerText.StartEffect(introStoryEvent.PostDialogChunks[currTextChunk].PersonName,
+            introStoryEvent.PostDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+            introStoryEvent.PostDialogChunks[currTextChunk].PersonSprite, introStoryEvent.PostDialogChunks[currTextChunk].PersonTalkSprite
+        );
         StationContainer.SetActive(true);
     }
+
+
 }
