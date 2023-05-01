@@ -17,13 +17,17 @@ public class AudioManager : MonoBehaviour
     [SerializeField]
     AudioClip[] ClickSounds = new AudioClip[4];
 
+    [SerializeField]
+    AudioClip[] LoFiBeats;
+
     void Awake()
     {
         audioSource = this.GetComponent<AudioSource>();
     }
 
-    public void StartMusic()
+    public void StartMusic(int num)
     {
+        audioSource.clip = LoFiBeats[num];
         audioSource.Play();
     }
     public void StopMusic()

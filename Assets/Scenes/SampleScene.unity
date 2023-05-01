@@ -2558,6 +2558,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 1654ae0db2a04c5409e638be5ce0222e, type: 3}
   - {fileID: 8300000, guid: 183be4099dfac674ba48a9f3ffb17c84, type: 3}
   - {fileID: 8300000, guid: 6056bb99170f85f4cb9135beea085169, type: 3}
+  LoFiBeats:
+  - {fileID: 8300000, guid: e5d89363a1c48bf49870d41adbe2812d, type: 3}
+  - {fileID: 8300000, guid: c9606200576b80f49af7c62b5ae950cc, type: 3}
+  - {fileID: 8300000, guid: 5b388a66d594e3a44affdc0a63def03a, type: 3}
 --- !u!4 &871461167
 Transform:
   m_ObjectHideFlags: 0
@@ -2583,7 +2587,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e5d89363a1c48bf49870d41adbe2812d, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

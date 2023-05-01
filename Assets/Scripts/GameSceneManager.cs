@@ -278,7 +278,7 @@ public class GameSceneManager : MonoBehaviour
             {
                 // hide this section of story
                 DialogContainer.SetActive(false);
-                audioManager.StartMusic();
+                audioManager.StartMusic(currStoryEvent);
                 PersonContainer.GetComponent<MoveNormal>().MoveDown();
                 InterludeContainer.GetComponent<MoveNormal>().MoveUp();
             }
