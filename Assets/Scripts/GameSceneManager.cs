@@ -27,6 +27,10 @@ public class GameSceneManager : MonoBehaviour
     Sprite FritzSprite;
     [SerializeField]
     Sprite FritzTalkSprite;
+    [SerializeField]
+    Sprite JanSprite;
+    [SerializeField]
+    Sprite JanTalkSprite;
 
     [SerializeField]
     GameObject DialogContainer;
@@ -74,6 +78,7 @@ public class GameSceneManager : MonoBehaviour
         fadeManager = this.GetComponent<FadeManager>();
         AddIntroStoryEvent();
         AddPunkStoryEvent();
+        AddMiningStoryEvent();
     }
 
     void AddIntroStoryEvent()
@@ -113,14 +118,14 @@ public class GameSceneManager : MonoBehaviour
         preChunk.PersonDialog.Add("Welcome to Mars... I run KMARZ, a local punk radio station.");
         preChunk.PersonDialog.Add("You're broadcasting over the SAME frequency we use for our punk station!");
         preChunk.PersonDialog.Add("We're getting a lot of interference.");
-        preChunk.PersonDialog.Add("If you don't want trouble, you better change frequencies!");
+        preChunk.PersonDialog.Add("Could you do us a HUGE favor and change frequencies?");
         storyEvent.PreDialogChunks.Add(preChunk);
 
         DialogChunk preChunk2 = new DialogChunk();
         preChunk2.PersonSprite = ChloeSprite;
         preChunk2.PersonTalkSprite = ChloeTalkSprite;
         preChunk2.PersonName = "CHLOE: ";
-        preChunk2.PersonDialog.Add("We better do what he says.");
+        preChunk2.PersonDialog.Add("He's right. They were on this frequency before us.");
         preChunk2.PersonDialog.Add("Let's choose a new frequency.");
         storyEvent.PreDialogChunks.Add(preChunk2);
 
@@ -128,9 +133,43 @@ public class GameSceneManager : MonoBehaviour
         postChunk.PersonSprite = ChloeSprite;
         postChunk.PersonTalkSprite = ChloeTalkSprite;
         postChunk.PersonName = "CHLOE: ";
-        postChunk.PersonDialog.Add("Great! Lunar lo-fi is live!");
+        postChunk.PersonDialog.Add("Hurrah! Lunar lo-fi is live!");
         storyEvent.PostDialogChunks.Add(postChunk);
         storyEvents[1] = storyEvent;
+    }
+    void AddMiningStoryEvent()
+    {
+        StoryEvent storyEvent = new StoryEvent();
+        storyEvent.ChoiceLeadIn = "none";
+        storyEvent.Choice1 = "3 GHZ";
+        storyEvent.Choice2 = "4 GHZ";
+
+        DialogChunk preChunk = new DialogChunk();
+        preChunk.PersonSprite = JanSprite;
+        preChunk.PersonTalkSprite = JanTalkSprite;
+        preChunk.PersonName = "Jan: ";
+        preChunk.PersonDialog.Add("Are you the folks running the radio station?");
+        preChunk.PersonDialog.Add("We run the mining camp over the hill.");
+        preChunk.PersonDialog.Add("You're radio station is interfering with our walkie talkies.");
+        preChunk.PersonDialog.Add("We NEED to be able to communicate with our miners in case of an explosion of accident.");
+        preChunk.PersonDialog.Add("You're going to have to shut down or change your broadcast.");
+        storyEvent.PreDialogChunks.Add(preChunk);
+
+        DialogChunk preChunk2 = new DialogChunk();
+        preChunk2.PersonSprite = ChloeSprite;
+        preChunk2.PersonTalkSprite = ChloeTalkSprite;
+        preChunk2.PersonName = "CHLOE: ";
+        preChunk2.PersonDialog.Add("I think he means business.");
+        preChunk2.PersonDialog.Add("Let's choose a new frequency.");
+        storyEvent.PreDialogChunks.Add(preChunk2);
+
+        DialogChunk postChunk = new DialogChunk();
+        postChunk.PersonSprite = ChloeSprite;
+        postChunk.PersonTalkSprite = ChloeTalkSprite;
+        postChunk.PersonName = "CHLOE: ";
+        postChunk.PersonDialog.Add("Whew! Lunar lo-fi is live!");
+        storyEvent.PostDialogChunks.Add(postChunk);
+        storyEvents[2] = storyEvent;
     }
 
     // Update is called once per frame

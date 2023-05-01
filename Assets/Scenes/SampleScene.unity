@@ -4224,6 +4224,8 @@ MonoBehaviour:
   ChloeTalkSprite: {fileID: 21300000, guid: 9fef7c4d6786a8a4ab8fb17bf5b32685, type: 3}
   FritzSprite: {fileID: 21300000, guid: 1ea85e61092b9b24c9b0d63e45e78813, type: 3}
   FritzTalkSprite: {fileID: 21300000, guid: 33f59c8085965834e8ea547fe97af3d3, type: 3}
+  JanSprite: {fileID: 21300000, guid: 513030798027a4e49a3eff5d0a7c002f, type: 3}
+  JanTalkSprite: {fileID: 21300000, guid: 450a60fd70202db4b9dbd7d91f6c143d, type: 3}
   DialogContainer: {fileID: 1461904000}
   DialogContainerText: {fileID: 1842386879}
   ChoiceContainer: {fileID: 869312613}
