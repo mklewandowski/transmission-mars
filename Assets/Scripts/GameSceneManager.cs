@@ -53,8 +53,11 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField]
     GameObject InterludeContainer;
 
-    float delayTimer = 0f;
-    float delayTimerMax = 1f;
+    float speakerDelayTimer = 0f;
+    float speakerDelayTimerMax = .4f;
+
+    float changeSpeakerDelayTimer = 0f;
+    float changeSpeakerDelayTimerMax = .4f;
 
     StoryEvent[] storyEvents = new StoryEvent[10];
     int currStoryEvent = 0;
@@ -129,10 +132,10 @@ public class GameSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (delayTimer > 0)
+        if (speakerDelayTimer > 0)
         {
-            delayTimer -= Time.deltaTime;
-            if (delayTimer < 0)
+            speakerDelayTimer -= Time.deltaTime;
+            if (speakerDelayTimer < 0)
             {
                 DialogContainer.transform.localScale = new Vector3 (.1f, .1f, .1f);
                 DialogContainer.SetActive(true);
@@ -143,15 +146,25 @@ public class GameSceneManager : MonoBehaviour
                 );
             }
         }
+        if (changeSpeakerDelayTimer > 0)
+        {
+            changeSpeakerDelayTimer -= Time.deltaTime;
+            if (changeSpeakerDelayTimer < 0)
+            {
+                PersonImage.sprite = storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite;
+                PersonContainer.GetComponent<MoveNormal>().MoveUp();
+                speakerDelayTimer = speakerDelayTimerMax;
+            }
+        }
     }
 
     public void StartGame()
     {
         audioManager.PlayMenuSound();
         TitlePanel.GetComponent<MoveNormal>().MoveUp();
-        PersonImage.sprite = storyEvents[currStoryEvent].PreDialogChunks[0].PersonSprite;
+        PersonImage.sprite = storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite;
         StoryPanel.GetComponent<MoveNormal>().MoveUp();
-        delayTimer = delayTimerMax;
+        speakerDelayTimer = speakerDelayTimerMax * 2f;
     }
 
     public void AdvanceText()
@@ -175,10 +188,14 @@ public class GameSceneManager : MonoBehaviour
                 {
                     // someone else needs to speak
                     currTextChunkIndex = 0;
-                    DialogContainerText.StartEffect(storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonName,
-                        storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
-                        storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite, storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonTalkSprite
-                    );
+                    DialogContainer.SetActive(false);
+                    changeSpeakerDelayTimer = changeSpeakerDelayTimerMax;
+                    PersonContainer.GetComponent<MoveNormal>().MoveDown();
+
+                    // DialogContainerText.StartEffect(storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonName,
+                    //     storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
+                    //     storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite, storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonTalkSprite
+                    // );
                 }
                 else
                 {
