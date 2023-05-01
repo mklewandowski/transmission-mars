@@ -7,6 +7,7 @@ using TMPro;
 public class GameSceneManager : MonoBehaviour
 {
     AudioManager audioManager;
+    FadeManager fadeManager;
 
     [SerializeField]
     GameObject TitlePanel;
@@ -59,6 +60,9 @@ public class GameSceneManager : MonoBehaviour
     float changeSpeakerDelayTimer = 0f;
     float changeSpeakerDelayTimerMax = .4f;
 
+    bool fadeIn = false;
+    bool fadeOut = false;
+
     StoryEvent[] storyEvents = new StoryEvent[10];
     int currStoryEvent = 0;
 
@@ -67,7 +71,7 @@ public class GameSceneManager : MonoBehaviour
     {
         GameObject am = GameObject.Find("AudioManager");
         audioManager = am.GetComponent<AudioManager>();
-
+        fadeManager = this.GetComponent<FadeManager>();
         AddIntroStoryEvent();
         AddPunkStoryEvent();
     }
@@ -156,6 +160,28 @@ public class GameSceneManager : MonoBehaviour
                 speakerDelayTimer = speakerDelayTimerMax;
             }
         }
+        if (fadeOut)
+        {
+            if (fadeManager.FadeComplete())
+            {
+                fadeOut = false;
+                audioManager.StopMusic();
+                WeekText.text = "WEEK " + (currStoryEvent + 1);
+                fadeManager.StartFadeIn();
+                fadeIn = true;
+            }
+        }
+        if (fadeIn)
+        {
+            if (fadeManager.FadeComplete())
+            {
+                fadeIn = false;
+                PersonImage.sprite = storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite;
+                PersonContainer.GetComponent<MoveNormal>().MoveUp();
+                DialogContainer.SetActive(false);
+                speakerDelayTimer = speakerDelayTimerMax * 2f;
+            }
+        }
     }
 
     public void StartGame()
@@ -191,11 +217,6 @@ public class GameSceneManager : MonoBehaviour
                     DialogContainer.SetActive(false);
                     changeSpeakerDelayTimer = changeSpeakerDelayTimerMax;
                     PersonContainer.GetComponent<MoveNormal>().MoveDown();
-
-                    // DialogContainerText.StartEffect(storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonName,
-                    //     storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
-                    //     storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite, storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonTalkSprite
-                    // );
                 }
                 else
                 {
@@ -264,23 +285,14 @@ public class GameSceneManager : MonoBehaviour
     public void NextStoryEvent()
     {
         audioManager.PlayMenuSound();
-
-        audioManager.StopMusic();
         currStoryEvent++;
-        WeekText.text = "WEEK " + (currStoryEvent + 1);
         currTextChunkIndex = 0;
         currTextChunk = 0;
         currTextPre = true;
-        PersonContainer.GetComponent<MoveNormal>().MoveUp();
         InterludeContainer.GetComponent<MoveNormal>().MoveDown();
 
-        DialogContainer.transform.localScale = new Vector3 (.1f, .1f, .1f);
-        DialogContainer.SetActive(true);
-        DialogContainer.GetComponent<GrowAndShrink>().StartEffect();
-        DialogContainerText.StartEffect(storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonName,
-            storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonDialog[currTextChunkIndex],
-            storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite, storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonTalkSprite
-        );
+        fadeManager.StartFadeOut();
+        fadeOut = true;
     }
 
 
