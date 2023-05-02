@@ -11,6 +11,8 @@ public class GameSceneManager : MonoBehaviour
 
     [SerializeField]
     GameObject TitlePanel;
+    [SerializeField]
+    GameObject StartPanel;
 
     [SerializeField]
     GameObject StoryPanel;
@@ -227,6 +229,7 @@ public class GameSceneManager : MonoBehaviour
     {
         audioManager.PlayMenuSound();
         TitlePanel.GetComponent<MoveNormal>().MoveUp();
+        StartPanel.GetComponent<MoveNormal>().MoveDown();
         PersonImage.sprite = storyEvents[currStoryEvent].PreDialogChunks[currTextChunk].PersonSprite;
         StoryPanel.GetComponent<MoveNormal>().MoveUp();
         speakerDelayTimer = speakerDelayTimerMax * 2f;
