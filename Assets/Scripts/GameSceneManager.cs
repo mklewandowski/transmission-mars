@@ -87,8 +87,8 @@ public class GameSceneManager : MonoBehaviour
     {
         StoryEvent introStoryEvent = new StoryEvent();
         introStoryEvent.ChoiceLeadIn = "none";
-        introStoryEvent.Choice1 = "5 GHZ";
-        introStoryEvent.Choice2 = "10 GHZ";
+        introStoryEvent.Choice1 = "90 MHZ";
+        introStoryEvent.Choice2 = "100 MHZ";
         DialogChunk preChunk = new DialogChunk();
         preChunk.PersonSprite = ChloeSprite;
         preChunk.PersonTalkSprite = ChloeTalkSprite;
@@ -96,7 +96,7 @@ public class GameSceneManager : MonoBehaviour
         preChunk.PersonDialog.Add("We made it to Mars! And we have all the equipment needed to start our new radio station!");
         preChunk.PersonDialog.Add("Soon, the people of Mars will fall in love with lunar lo-fi!");
         preChunk.PersonDialog.Add("We're in charge of the tech so first we need to pick a frequency to broadcast our music.");
-        preChunk.PersonDialog.Add("I think we should try 5 GHZ or 10 GHZ. What do you think?");
+        preChunk.PersonDialog.Add("I think we should try 90 MHZ or 100 MHZ. Those are common choices for FM radio back on Earth. What do you think?");
         introStoryEvent.PreDialogChunks.Add(preChunk);
         DialogChunk postChunk = new DialogChunk();
         postChunk.PersonSprite = ChloeSprite;
@@ -110,8 +110,8 @@ public class GameSceneManager : MonoBehaviour
     {
         StoryEvent storyEvent = new StoryEvent();
         storyEvent.ChoiceLeadIn = "none";
-        storyEvent.Choice1 = "1 GHZ";
-        storyEvent.Choice2 = "2 GHZ";
+        storyEvent.Choice1 = "80 MHZ";
+        storyEvent.Choice2 = "95 MHZ";
 
         DialogChunk preChunk = new DialogChunk();
         preChunk.PersonSprite = FritzSprite;
@@ -143,8 +143,8 @@ public class GameSceneManager : MonoBehaviour
     {
         StoryEvent storyEvent = new StoryEvent();
         storyEvent.ChoiceLeadIn = "none";
-        storyEvent.Choice1 = "3 GHZ";
-        storyEvent.Choice2 = "4 GHZ";
+        storyEvent.Choice1 = "85 MHZ";
+        storyEvent.Choice2 = "105 MHZ";
 
         DialogChunk preChunk = new DialogChunk();
         preChunk.PersonSprite = JanSprite;
