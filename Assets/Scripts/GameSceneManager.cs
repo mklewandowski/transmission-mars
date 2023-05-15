@@ -152,7 +152,7 @@ public class GameSceneManager : MonoBehaviour
         preChunk.PersonName = "Jan: ";
         preChunk.PersonDialog.Add("Are you the folks running the radio station?");
         preChunk.PersonDialog.Add("We run the mining camp over the hill.");
-        preChunk.PersonDialog.Add("You're radio station is interfering with our walkie talkies.");
+        preChunk.PersonDialog.Add("Your radio station is interfering with our walkie talkies.");
         preChunk.PersonDialog.Add("We NEED to be able to communicate with our miners in case of an explosion of accident.");
         preChunk.PersonDialog.Add("You're going to have to shut down or change your broadcast.");
         storyEvent.PreDialogChunks.Add(preChunk);
