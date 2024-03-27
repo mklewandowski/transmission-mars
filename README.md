@@ -1,5 +1,7 @@
 # transmission-mars
-Transmission Mars is a story game designed centered around frequency allocation.
+Transmission Mars is a story game designed centered around frequency allocation. Transmission Mars was originally created as a prototype demo for potential use in a larger educational radio science project or mobile application. Our team never pursued Transmission Mars further so for now it is just a prototype demo.
+
+![Wavetown gameplay](https://github.com/mklewandowski/transmission-mars/blob/main/mars.gif?raw=true)
 
 ## Supported Platforms
 Transmission Mars is designed for use on the Web.
@@ -7,7 +9,7 @@ Transmission Mars is designed for use on the Web.
 ## Running Locally
 Use the following steps to run locally:
 1. Clone this repo
-2. Open repo folder using Unity 2021.3.27f1
+2. Open repo folder using Unity 2021.3.35f1
 3. Install Text Mesh Pro
 
 ## Building the Project
